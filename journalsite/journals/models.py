@@ -16,8 +16,6 @@ class Journal(models.Model):
     modified_date = models.DateTimeField('date modified')
     name_text = models.CharField('journal name', max_length=200)
     description_text = models.CharField('journal description', max_length=200)
-    hidden_boolean = models.BooleanField('hidden', default=False)
-    deleted_boolean = models.BooleanField('deleted', default=False)
     def __str__(self):
         return self.name_text
     
@@ -31,5 +29,7 @@ class Entry(models.Model):
     title_text = models.CharField('entry title', max_length=200)
     body_text = models.CharField('entry body', max_length=200)
     published_date = models.DateTimeField('published date')
+    hidden_boolean = models.BooleanField('hidden', default=False)
+    deleted_boolean = models.BooleanField('deleted', default=False)
     def __str__(self):
         return self.title_text
