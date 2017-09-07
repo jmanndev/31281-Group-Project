@@ -23,6 +23,9 @@ class Journal(models.Model):
 class EntryLog(models.Model):
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
     
+                
+    
+    
 @python_2_unicode_compatible
 class Entry(models.Model):
     entry_log = models.ForeignKey(EntryLog, on_delete=models.CASCADE)

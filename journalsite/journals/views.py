@@ -10,7 +10,7 @@ def index(request):
     return HttpResponse("Hi world")
 
 def journals(request):
-    journal_list = Journal.objects.order_by('created_date')
+    journal_list = Journal.objects.order_by('-created_date')
     template = loader.get_template('journals/journals_all.html')
     context = {
         'journal_list': journal_list,
@@ -35,10 +35,11 @@ def journal_create_confirm(request):
     
 def journal_view(request, journal_id):
     journal = get_object_or_404(Journal, pk=journal_id)
-    entry_list = EntryLog.objects.filter(journal=journal_id)
+    entry_list = Entry.objects.filter(entry_log__journal=journal_id).order_by('-published_date')
     template = loader.get_template('journals/view_journal.html')
     context = {
         'journal': journal,
+        'entry_list': entry_list,
     }
     return HttpResponse(template.render(context, request))
     
