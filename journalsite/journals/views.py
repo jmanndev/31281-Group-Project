@@ -16,7 +16,9 @@ def journals(request):
         'journal_list': journal_list,
     }
     return HttpResponse(template.render(context,request))
-    
+
+
+
 def journal_create(request):
     template = loader.get_template('journals/create_journal.html')
     context = {    }
@@ -31,8 +33,20 @@ def journal_create_confirm(request):
         modified_date=datetime.datetime.now()
     )
     j.save()
-    return HttpResponseRedirect(reverse('journals:journals'))    
-    
+    return HttpResponseRedirect(reverse('journals:journals'))
+
+def journal_search(request):
+        search_text = request.POST.get('search')
+        journal_search_list = Journal.objects.filter(name_text__icontains=search_text)
+        template = loader.get_template('journals/journals_search.html')
+        context = {
+            'journal_list': journal_search_list,
+            'search_text' : search_text
+        }
+        print(journal_search_list)
+        # return HttpResponse("You're looking at question %s." % journal_search_list)
+        return HttpResponse(template.render(context, request))
+
 def journal_view(request, journal_id):
     journal = get_object_or_404(Journal, pk=journal_id)
     entry_list = Entry.objects.filter(entry_log__journal=journal_id).order_by('-published_date')
@@ -42,6 +56,9 @@ def journal_view(request, journal_id):
         'entry_list': entry_list,
     }
     return HttpResponse(template.render(context, request))
+
+
+
     
 def entry_create(request, journal_id):
     journal = get_object_or_404(Journal, pk=journal_id)
@@ -75,6 +92,13 @@ def entry_view(request, journal_id, entry_id):
     return HttpResponse("view entry %s" % entry_id)
     
 def entry_edit(request, journal_id, entry_id):
+    journal = get_object_or_404(Journal, pk=journal_id)
+    entity = get_object_or_404(journal, pk = entry_id)
+    template = loader.get_template('journals/create_entry.html')
+    context = {
+        'journal': journal,
+    }
+    return HttpResponse(template.render(context, request))
     return HttpResponse("edit entry %s" % entry_id)
     
 def entry_history(request, journal_id, entry_id):
