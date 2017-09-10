@@ -89,17 +89,56 @@ def entry_create_confirm(request, journal_id):
     return HttpResponseRedirect(reverse('journals:journal_view', kwargs={'journal_id': journal_id}))  
 
 def entry_view(request, journal_id, entry_id):
-    return HttpResponse("view entry %s" % entry_id)
+    entry = Entry.objects.get(pk = entry_id)
+    print(entry)
+    return HttpResponse("view entry %s" % entry.body_text)
     
 def entry_edit(request, journal_id, entry_id):
-    journal = get_object_or_404(Journal, pk=journal_id)
-    entity = get_object_or_404(journal, pk = entry_id)
-    template = loader.get_template('journals/create_entry.html')
+    # entry = Entry.objects.get(pk=entry_id)
+    # print(entry)
+    # journal = get_object_or_404(Journal, pk=journal_id)
+    entry = get_object_or_404(Entry, pk = entry_id)
+    template = loader.get_template('journals/edit_entity.html')
     context = {
-        'journal': journal,
+        "journal_id":journal_id,
+        'entry': entry,
     }
     return HttpResponse(template.render(context, request))
-    return HttpResponse("edit entry %s" % entry_id)
-    
+    # print(entry.body_text)
+    # return HttpResponse("edit entry %s" % entry_id)
+def entry_edit_confirm(request, journal_id, entry_id):
+    # context = {
+    #     'entry': entry,
+    # }
+    entry = get_object_or_404(Entry, pk = entry_id)
+    entry.body_text = request.POST.get('description')
+    entry.title_text = request.POST.get('name')
+    entry.save()
+
+    print(entry.title_text)
+    return HttpResponseRedirect(reverse('journals:journal_view', kwargs={'journal_id': journal_id}))
+
+    # journal = get_object_or_404(Journal, pk=journal_id)
+    # context = {
+    #     'journal': journal,
+    # }
+    # el = EntryLog(
+    #     journal=Journal.objects.get(pk=journal_id)
+    # )
+    # el.save()
+    # e = Entry(
+    #     entry_log=el,
+    #     title_text=request.POST.get('name'),
+    #     body_text=request.POST.get('description'),
+    #     published_date=datetime.datetime.now(),
+    #     hidden_boolean=False,
+    #     deleted_boolean=False
+    # )
+    # e.save()
+    # return HttpResponseRedirect(reverse('journals:journal_view', kwargs={'journal_id': journal_id}))
+    # template = loader.get_template('journals/edit_entity.html')
+    # return HttpResponse(template.render(context, request))
+
+
 def entry_history(request, journal_id, entry_id):
     return HttpResponse("entry history %s" % entry_id)
