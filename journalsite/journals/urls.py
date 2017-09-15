@@ -17,9 +17,6 @@ urlpatterns = [
     
     #www.web.com/journal/1234
     url(r'^journal/(?P<journal_id>[0-9]+)/$', views.journal_view, name='journal_view'),
-
-    # www.web.com/journal/search
-    url(r'^journal/search/$', views.journal_search, name='journal_search'),
     
     #www.web.com/journal/1234/create
     url(r'^journal/(?P<journal_id>[0-9]+)/create/$', views.entry_create, name='entry_create'),
