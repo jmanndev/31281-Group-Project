@@ -86,7 +86,7 @@ def entry_create_confirm(request, journal_id):
         deleted_boolean=False
     )
     e.save()
-    return HttpResponseRedirect(reverse('journals:journal_view', kwargs={'journal_id': journal_id}))  
+    return HttpResponseRedirect(reverse('journals:journal_view', args=(journal_id)))   
 
 def entry_view(request, journal_id, entry_id):
     entry = Entry.objects.get(pk = entry_id)
