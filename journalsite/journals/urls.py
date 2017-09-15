@@ -27,9 +27,6 @@ urlpatterns = [
     
     #www.web.com/journal/1234
     url(r'^journal/(?P<journal_id>[0-9]+)/$', views.journal_view, name='journal_view'),
-
-    # www.web.com/journal/search
-    url(r'^journal/search/$', views.journal_search, name='journal_search'),
     
     #www.web.com/journal/1234/create
     url(r'^journal/(?P<journal_id>[0-9]+)/create/$', views.entry_create, name='entry_create'),
@@ -40,10 +37,7 @@ urlpatterns = [
         
     #www.web.com/journal/1234/edit/1234
     url(r'^journal/(?P<journal_id>[0-9]+)/edit/(?P<entry_id>[0-9]+)/$', views.entry_edit, name='entry_edit'),
-
-    #www.web.com/journal/1234/edit/1234
-    url(r'^journal/(?P<journal_id>[0-9]+)/edit/confirm/(?P<entry_id>[0-9]+)/$', views.entry_edit_confirm, name='entry_edit_confirm'),
-
+        
     #www.web.com/journal/1234/history/1234
     url(r'^journal/(?P<journal_id>[0-9]+)/history/(?P<entry_id>[0-9]+)/$', views.entry_history, name='entry_history'),
 ]

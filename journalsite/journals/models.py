@@ -36,14 +36,3 @@ class Entry(models.Model):
     deleted_boolean = models.BooleanField('deleted', default=False)
     def __str__(self):
         return self.title_text
-
-# @python_2_unicode_compatible
-# class EntryHistoryActivity(models.Model):
-#     entry_log = models.ForeignKey(EntryLog, on_delete=models.CASCADE)
-#     pre_title_text = models.CharField('entry title', max_lengtph=200)
-#     pre_body_text = models.CharField('entry body', max_length=200)
-#     pre_published_date = models.DateTimeField('published date')
-#     pre_hidden_boolean = models.BooleanField('hidden', default=False)
-#     pre_deleted_boolean = models.BooleanField('deleted', default=False)
-#     def __str__(self):
-#         return self.title_text
