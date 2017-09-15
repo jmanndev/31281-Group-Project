@@ -23,7 +23,6 @@ if (member != null) {
 </div>
 } -->
             <h1>Homepage</h1>
-         <a href="{% url 'journals:journals' %}">Journals</a>
             <div style="text-align: center;">
                 <form action="{% url 'journals:journal_search' %}" method="post">
                 {% csrf_token %}

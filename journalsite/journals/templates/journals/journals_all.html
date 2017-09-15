@@ -26,10 +26,9 @@ if (member != null) {
             <div style="text-align: center;">
                 <form action="{% url 'journals:journal_search' %}" method="post">
                 {% csrf_token %}
-                    <fieldset>
+
                     <input type="text" name="search">
-                    <input type="submit" value="Search"></input>
-                    </fieldset>
+                    <button type="submit">Search</button>
             </form>
 
 
