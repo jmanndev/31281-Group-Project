@@ -8,9 +8,19 @@ urlpatterns = [
     #www.web.com
     url(r'^$', views.index, name='index'),
     
-    #www.web.com/journals
+    # www.web.com/journals
     url(r'^journals/$', views.journals, name='journals'),
-    
+    # www.web.com/journals/login
+    url(r'^login/$', views.journal_login, name='journal_login'),
+    # www.web.com/journals/login/confirm
+    url(r'^login/confirm/$', views.journal_login_confirm, name='journal_login_confirm'),
+
+    # www.web.com/journals/register
+    url(r'^register/$', views.journal_register, name='journal_register'),
+    # www.web.com/journals/register/confirm
+    url(r'^register/confirm/$', views.journal_register_confirm, name='journal_register_confirm'),
+
+
     #www.web.com/create
     url(r'^create/$', views.journal_create, name='journal_create'),
     url(r'^create/confirm/$', views.journal_create_confirm, name="journals_create_confirm"),

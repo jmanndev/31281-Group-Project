@@ -17,6 +17,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('journals.urls')),
+    url(r'^journals/', include('journals.urls')),
     url(r'^django/', admin.site.urls),
 ]

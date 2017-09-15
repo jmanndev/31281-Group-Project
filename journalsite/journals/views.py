@@ -7,7 +7,42 @@ from django.urls import reverse
 from .models import Journal, User, Entry, EntryLog
 
 def index(request):
-    return HttpResponse("Hi world")
+    # template = loader.get_template('journals/jounals_login.html')
+    return HttpResponseRedirect(reverse('journals:journal_login'))
+    # return HttpResponse("Hi world")
+
+def journal_login(request):
+    template = loader.get_template('journals/journals_login.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+    # return HttpResponse("Hi world")
+
+def journal_login_confirm(request):
+
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    try:
+        user = get_object_or_404(User, email_text=email, password_hash=password)
+    except:
+        return HttpResponse("The email or the password is incorrect!!")
+
+
+    return HttpResponseRedirect(reverse('journals:journals'))
+def journal_register(request):
+    template = loader.get_template('journals/journals_register.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+    # return HttpResponse("Hi world")
+def journal_register_confirm(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    gender = request.POST.get('gender')
+    password = request.POST.get('password')
+    # print(name, "+", email, "+", gender, "+", password)
+    user = User(email_text = email, password_hash = password)
+    user.save()
+    return HttpResponse("Your email is %s, password is %s" % (user.email_text, user.password_hash))
+
 
 def journals(request):
     journal_list = Journal.objects.order_by('-created_date')
