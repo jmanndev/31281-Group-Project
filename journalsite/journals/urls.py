@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^journal/entry/search/$', views.JournalEntrySearchList.as_view(), name='entry_search'),
     # url(r'^admin/', admin.site.urls),
     #www.web.com
+  
     # url(r'^$', views.index, name='index'),
     
     # # www.web.com/journals
@@ -68,5 +69,3 @@ urlpatterns = [
     #
     # #www.web.com/journal/1234/history/1234
     # url(r'^journal/(?P<journal_id>[0-9]+)/history/(?P<entry_id>[0-9]+)/$', views.entry_history, name='entry_history'),
-]
-
