@@ -30,7 +30,7 @@
         <th>Entry Name</th>
         <th>Entry Description</th>
         <th>Entry Data</th>
-        <th>Entry Log</th>
+        <th>Entry History</th>
         <th>Hide Entry</th>
 
     </tr>
@@ -43,7 +43,7 @@
         <td>{{ entry.body_text }}</td>
         <td>{{ entry.published_date }}</td>
 
-        <td><a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Entry Log</a></td>
+        <td><a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry %}" class="btn btn-md btn-fill btn-warning"> Entry History</a></td>
         {% if entry.hidden_boolean %}
             <td><a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-warning"></span> Invisible Entry</a></td>
         {% else %}
