@@ -2,12 +2,14 @@
 
 {% block pregroup %}
     <div class="container">
+    <h1>Journals List</h1>
 <table class="table">
     <thead>
     <tr class ="info">
         <th>Journal Name</th>
         <th>Journal Description</th>
         <th>Created Data</th>
+        <th>Entries</th>
         <th>Manage</th>
     </tr>
 
@@ -15,9 +17,10 @@
     <tbody >
     {% for journal in object_list  %}
     <tr>
-        <td><a href="{% url 'journals:entry_list' pk=journal.id %}">{{ journal.name_text }}</a></td>
+        <td><a href="{% url 'journals:single' slug=journal.slug %}">{{ journal.slug }}</a></td>
         <td>{{ journal.description_text }}</td>
         <td>{{ journal.created_date }}</td>
+        <td><a href="{% url 'journals:entry_list' pk=journal.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
         <td>
 
             <a class="btn btn-primary" href="{% url 'journals:edit' pk=journal.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>

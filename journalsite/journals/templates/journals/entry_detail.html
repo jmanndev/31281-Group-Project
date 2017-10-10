@@ -14,30 +14,56 @@
 {#    orginal_id = models.IntegerField('orginal entry id', null= True)#}
 
 <div class="container">
-<table class="table">
-    <thead>
-    <tr class ="info">
-        <th>Entry Name</th>
-        <th>Entry Description</th>
-        <th>Created Data</th>
-        <th>IS Hidden</th>
-        <th>IS DELETED</th>
+<h1>Entry Detail</h1>
+
+<form>
+ 
+    <label >Entry Name:</label>
+    <input type="text" class="form-control" value="{{ entry.title_text}}" disabled>
+
+
+    <label>Entry Description:</label>
+    <input type="textarea" class="form-control" value="{{ entry.body_text }}" disabled>
+
+
+    <label>Created Data:</label>
+
+    <input type="text" class="form-control" value="{{ entry.published_date }}" disabled>
+
+     <label>IS Hidden:</label>
+
+    <input type="text" class="form-control" value="{{ entry.hidden_boolean }}" disabled>
+
+     <label>IS DELETED:</label>
+
+    <input type="text" class="form-control" value="{{ entry.deleted_boolean }}" disabled>
+
+</form>
+
+{#<table class="table">#}
+{#    <thead>#}
+{#    <tr class ="info">#}
+{#        <th>Entry Name</th>#}
+{#        <th>Entry Description</th>#}
+{#        <th>Created Data</th>#}
+{#        <th>IS Hidden</th>#}
+{#        <th>IS DELETED</th>#}
 {#        <th>EDIT HISTORY</th>#}
-    </tr>
-
-    </thead>
-    <tbody>
-    <tr>
-        <td><a></a>{{ entry.title_text }}</td>
-        <td>{{ entry.body_text }}</td>
-        <td>{{ entry.published_date }}</td>
-        <td>{{ entry.hidden_boolean }}</td>
-        <td>{{ entry.deleted_boolean }}</td>
+{#    </tr>#}
+{##}
+{#    </thead>#}
+{#    <tbody>#}
+{#    <tr>#}
+{#        <td><a></a>{{ entry.title_text }}</td>#}
+{#        <td>{{ entry.body_text }}</td>#}
+{#        <td>{{ entry.published_date }}</td>#}
+{#        <td>{{ entry.hidden_boolean }}</td>#}
+{#        <td>{{ entry.deleted_boolean }}</td>#}
 {#        <td>{{ journal.created_date }}</td>#}
-    </tr>
-    </tbody>
-
-</table>
+{#    </tr>#}
+{#    </tbody>#}
+{##}
+{#</table>#}
 
 
 {##}

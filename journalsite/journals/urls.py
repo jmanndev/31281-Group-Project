@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^journal/entry/(?P<orginal_entry>\d+)/log/$', views.JournalEntryLog.as_view(), name='entry_log'),
     url(r'^journal/entry/(?P<pk>\d+)/hide/$', views.entry_hide, name='entry_hide'),
     url(r'^journal/entry/(?P<pk>\d+)/replace/(?P<orginal_entry_index>\d+)/$', views.entry_replace, name='entry_replace'),
-    url(r'^journal/entry/search/$', views.JournalEntrySearchList.as_view(), name='entry_search'),
+    url(r'^journal/entry/search/$', views.JournalEntrySearchList.as_view(), name='entry_search'),]
     # url(r'^admin/', admin.site.urls),
     #www.web.com
   

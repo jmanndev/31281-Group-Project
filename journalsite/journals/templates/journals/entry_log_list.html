@@ -3,7 +3,7 @@
 {% block preentry %}
 
     <div class="container">
-<h1>Entry Log</h1>
+<h1>Entry Histroy</h1>
 {# <li><a href="{% url 'journals:entity_create' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Entry!{{ gournal_id }}</a></li>#}
 <table class="table">
     <thead>
@@ -11,7 +11,9 @@
         <th>Entry Name</th>
         <th>Entry Description</th>
         <th>Entry Data</th>
-        <th>Replace</th>
+        <th>Hide</th>
+        <th>Delete</th>
+        <th>Avaiablilty</th>
     </tr>
 
     </thead>
@@ -21,6 +23,8 @@
         <td><a href="{% url 'journals:entry_update' entry.id %}">{{ entry.title_text }}</a></td>
         <td>{{ entry.body_text }}</td>
         <td>{{ entry.published_date }}</td>
+    <td>{{ entry.hidden_boolean }}</td>
+    <td>{{ entry.deleted_boolean }}</td>
         {% if entry.is_available %}
 {#            disable the menu#}
              <td><a href="#"
