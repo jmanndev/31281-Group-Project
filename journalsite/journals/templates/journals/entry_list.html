@@ -1,5 +1,14 @@
 {% extends "journals/entry_base.html" %}
-
+{#<!DOCTYPE html>#}
+{##}
+{#{% load staticfiles %}#}
+{##}
+{#<html>#}
+{#<head>#}
+{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
+{#    <script>hello()</script>#}
+{#</head>#}
+{#<body>#}
 {% block preentry %}
 
 <h1>Entry List</h1>
@@ -65,8 +74,8 @@
 </table>
 {% endif %}
     <a href="{% url 'journals:entry_create' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Entry!</a>
-    <a href="{% url 'journals:entry_list' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Active Entry</a>
-     <a href="{% url 'journals:entry_list_all' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> All Entry</a>
+{#    <a href="{% url 'journals:entry_list' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Active Entry</a>#}
+{#     <a href="{% url 'journals:entry_list_all' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> All Entry</a>#}
 {# journal = models.ForeignKey(Journal, on_delete=models.CASCADE)#}
 {#    title_text = models.CharField('entry title', max_length=200)#}
 {#    body_text = models.CharField('entry body', max_length=200)#}
@@ -81,7 +90,26 @@
 {#        <h1>{{ journal.name_text }}</h1>#}
 {#        <h1>Journal Description:</h1>#}
 {#        <h1>{{ journal.description_text }}</h1>#}
+{#    <script>hello()</script>#}
+     <form action="{% url 'journals:entry_list' pk=gournal_id %}" method="GET" id="entry-select">
+    {% csrf_token %}
+    <select id="id_entry_list" name="entry_lists" onchange="hello();">
+{#      <option disabled selected> -- select an option -- </option>#}
+
+      <option value=1 id="option_1">Active Entries</option>
+      <option value=2 id="option_2">All Entries</option>
+    </select>
+    <script>setValue({{ select_id }})</script>
+  </form>
+
 
 </div>
 
+
 {% endblock %}
+{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
+
+{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
+{# <script>hello()</script>#}
+{#</body>#}
+{#</html>#}

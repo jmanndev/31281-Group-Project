@@ -1,5 +1,17 @@
 function hello() {
-    alert("Hello world")
+            var frm = document.getElementById("entry-select");
+            frm.submit();
 }
 
-// hello()
+function entryChange() {
+            var frm = document.getElementById("entry-select");
+            frm.submit();
+}
+
+function setValue(id) {
+    if (id ==1){
+        document.getElementById("option_1").selected = 'selected';
+    } else if(id ==2){
+        document.getElementById("option_2").selected = 'selected';
+    }
+}

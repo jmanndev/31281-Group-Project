@@ -77,6 +77,7 @@
 			{% if user.is_authenticated%}
 
                 <a class="btn btn-primary" href="{% url 'journals:entry_update' pk=entry.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-primary" href="{% url 'journals:entry_list' pk=entry.journal.id %}"><span class="glyphicon glyphicon-ok"></span></a>
                 <a class="btn btn-primary" href="{% url 'journals:entry_remove' pk=entry.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
 
 {#				<a href="{% url 'journals:entry_edit' pk=journal.pk %}" title="delete" class="btn btn-simple">#}
