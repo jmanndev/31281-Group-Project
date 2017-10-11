@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Model
@@ -17,8 +18,18 @@ from journals.models import Journal, Entry
 from .forms import UserCreateForm, JournalCreateForm, EntryCreateForm, EntryUpdateForm, JournalEditForm, EntryCopyForm
 
 
-class HomePage(TemplateView):
-    template_name = "journals/index.html"
+
+class HomePage(LoginRequiredMixin, generic.ListView):
+    model = Journal
+
+    def get_queryset(self):
+
+
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+# class HomePage(TemplateView):
+#     template_name = "journals/index.html"
+
 
 class SignUp(CreateView):
     form_class = UserCreateForm
@@ -28,6 +39,9 @@ class SignUp(CreateView):
 
 class TestPage(TemplateView):
     template_name = 'journals/test.html'
+
+    # href = "{% url 'journals:all' %}"
+
 
 class ThanksPage(TemplateView):
     template_name = 'journals/thanks.html'
@@ -76,24 +90,9 @@ class DeleteJournal(LoginRequiredMixin, generic.DeleteView):
 
         return super().delete(*args, **kwargs)
 
-class JournalList(LoginRequiredMixin, generic.ListView):
-    model = Journal
-
-
-class JournalEntryList(LoginRequiredMixin, generic.ListView):
-    model = Entry
 
 
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # print("********" + self.request)
-        return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(hidden_boolean=True).exclude(is_available=False)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["gournal_id"] = self.kwargs.get("pk")
-        return context
 
 
 
@@ -160,6 +159,41 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
         return context
 
 
+class JournalList(LoginRequiredMixin, generic.ListView):
+    model = Journal
+
+    def get_queryset(self):
+
+
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+
+
+
+class JournalEntryList(LoginRequiredMixin, generic.ListView):
+    model = Entry
+
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        print("************", self.request.GET.get('entry_lists', 0))
+        if (self.request.GET.get('entry_lists', 0) == '1'):
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
+                hidden_boolean=True).exclude(is_available=False)
+        elif (self.request.GET.get('entry_lists', 0) == '2'):
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(is_available=False)
+        else:
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
+                hidden_boolean=True).exclude(is_available=False)
+        # print("********" + self.request)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["gournal_id"] = self.kwargs.get("pk")
+        context["select_id"] = self.request.GET.get('entry_lists', 0)
+        return context
 
 class JournalEntryListAll(LoginRequiredMixin, generic.ListView):
     model = Entry

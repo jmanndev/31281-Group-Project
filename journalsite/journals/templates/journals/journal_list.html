@@ -1,5 +1,5 @@
 {% extends "journals/journal_base.html" %}
-
+{# <script>hello()</script>#}
 {% block pregroup %}
     <div class="container">
     <h1>Journals List</h1>
@@ -31,21 +31,18 @@
 
     </tr>
         {% empty %}
-    <li>No articles yet.</li>
+        <tr>
+        <td>
+            No articles yet.
+        </td>
+        </tr>
     {% endfor %}
     </tbody>
 
 </table>
 
 
-{##}
-{#		<strong>{{ journal.user.username }}</strong>#}
-{##}
-{#	    <h1>Journal Name:</h1>#}
-{#        <h1>{{ journal.name_text }}</h1>#}
-{#        <h1>Journal Description:</h1>#}
-{#        <h1>{{ journal.description_text }}</h1>#}
+
 
 </div>
-
 {% endblock %}
