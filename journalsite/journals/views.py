@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Model
@@ -17,8 +18,18 @@ from journals.models import Journal, Entry
 from .forms import UserCreateForm, JournalCreateForm, EntryCreateForm, EntryUpdateForm, JournalEditForm, EntryCopyForm
 
 
-class HomePage(TemplateView):
-    template_name = "journals/index.html"
+
+class HomePage(LoginRequiredMixin, generic.ListView):
+    model = Journal
+
+    def get_queryset(self):
+
+
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+# class HomePage(TemplateView):
+#     template_name = "journals/index.html"
+
 
 class SignUp(CreateView):
     form_class = UserCreateForm
@@ -28,6 +39,9 @@ class SignUp(CreateView):
 
 class TestPage(TemplateView):
     template_name = 'journals/test.html'
+
+    # href = "{% url 'journals:all' %}"
+
 
 class ThanksPage(TemplateView):
     template_name = 'journals/thanks.html'
@@ -76,24 +90,9 @@ class DeleteJournal(LoginRequiredMixin, generic.DeleteView):
 
         return super().delete(*args, **kwargs)
 
-class JournalList(LoginRequiredMixin, generic.ListView):
-    model = Journal
-
-
-class JournalEntryList(LoginRequiredMixin, generic.ListView):
-    model = Entry
 
 
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # print("********" + self.request)
-        return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(hidden_boolean=True).exclude(is_available=False)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["gournal_id"] = self.kwargs.get("pk")
-        return context
 
 
 
@@ -107,9 +106,19 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
 
         self.journal_id = self.request.GET.get("journal_id")
-        queryset = super().get_queryset().filter(journal_id=self.journal_id).exclude(deleted_boolean=True).exclude(
+        queryset = super().get_queryset()
+        if self.request.GET.get("seletor_value", 0) == '1':
+            print("*****" + self.request.GET.get("seletor_value", 0))
+            queryset = queryset.filter(journal_id=self.journal_id).exclude(deleted_boolean=True).exclude(
             hidden_boolean=True).exclude(is_available=False)
-        # print("********" + self.request.GET.get("content"))
+        elif self.request.GET.get("seletor_value", 0) == '2':
+            print("*****" + self.request.GET.get("seletor_value", 0))
+            queryset = queryset.filter(journal_id=self.journal_id).exclude(is_available=False)
+        else:
+            queryset = queryset.filter(journal_id=self.journal_id).exclude(deleted_boolean=True).exclude(
+                hidden_boolean=True).exclude(is_available=False)
+
+        print("*****" +self.request.GET.get("seletor_value", 0))
 
         content = self.request.GET.get("content")
         if content != None:
@@ -119,10 +128,10 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
         start_date = self.request.GET.get("start_date")
         end_date = self.request.GET.get("end_date")
         if date != '':
-            queryset = queryset.filter(published_date=date)
+            queryset = queryset.filter(created_date=date)
 
         if start_date != '' and end_date != '':
-            queryset = queryset.filter(Q(published_date__gte = start_date) & Q(published_date__lte =end_date))
+            queryset = queryset.filter(Q(created_date__gte = start_date) & Q(created_date__lte =end_date))
 
         # date = self.request.GET.get("date")
         # date = datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -157,8 +166,8 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         # print("********" + self.kwargs.get("gournal_id"))
         context["gournal_id"] = self.journal_id
+        context["select_id"] = self.request.GET.get("seletor_value", 0)
         return context
-
 
 
 class JournalEntryListAll(LoginRequiredMixin, generic.ListView):
@@ -173,6 +182,57 @@ class JournalEntryListAll(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         context["gournal_id"] = self.kwargs.get("pk")
         return context
+
+
+class JournalList(LoginRequiredMixin, generic.ListView):
+    model = Journal
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+
+
+
+class JournalEntryList(LoginRequiredMixin, generic.ListView):
+    model = Entry
+
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        print("************", self.request.GET.get('entry_lists', 0))
+        if (self.request.GET.get('entry_lists', 0) == '1'):
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
+                hidden_boolean=True).exclude(is_available=False)
+        elif (self.request.GET.get('entry_lists', 0) == '2'):
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(is_available=False)
+        else:
+            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
+                hidden_boolean=True).exclude(is_available=False)
+        # print("********" + self.request)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["gournal_id"] = self.kwargs.get("pk")
+        context["select_id"] = self.request.GET.get('entry_lists', 0)
+        return context
+
+
+class JournalEntryDetail(LoginRequiredMixin, generic.DetailView):
+    model = Entry
+    # select_related = ("user", "group")
+    login_url = 'journals:login'
+
+    # form_class = EntryUpdateForm
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # print(queryset)
+        # kwargs 是指r"by/(?P<username>[-\w]+)/(?P<pk>\d+)/$" 里面的username和ok
+        return queryset.filter(pk=self.kwargs.get("pk"))
+
 
 class JournalEntryCreate(LoginRequiredMixin, CreateView):
     # fields = ('title_text', 'body_text')
@@ -190,20 +250,13 @@ class JournalEntryCreate(LoginRequiredMixin, CreateView):
 
 
 
-    # def get_queryset(self):
-    #     try:
-    #         self
 
-    # def get_success_url(self):
-    #     # print("********" + self.title_text + "***" + self.pk)
-    #     self.orginal_id = get_object_or_404(Entry, pk=self.kwargs.get("pk"))
-    #     return reverse("journals:entry_log", kwargs={"orginal_id": self.orginal_id})
 
-class JournalEntryDetail(LoginRequiredMixin, generic.DetailView):
+class JournalEntryHistoryDetail(LoginRequiredMixin, generic.DetailView):
     model = Entry
     # select_related = ("user", "group")
     login_url = 'journals:login'
-
+    template_name_suffix = '_log_detail'
     # form_class = EntryUpdateForm
 
     def get_queryset(self):
@@ -211,6 +264,9 @@ class JournalEntryDetail(LoginRequiredMixin, generic.DetailView):
         # print(queryset)
                 # kwargs 是指r"by/(?P<username>[-\w]+)/(?P<pk>\d+)/$" 里面的username和ok
         return queryset.filter(pk=self.kwargs.get("pk"))
+
+
+
 
 class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
         model = Entry
@@ -238,7 +294,7 @@ class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
 
 
             # print("********" + entry.orginal_entry)
-            return reverse("journals:entry_log", kwargs={"orginal_entry":entry.orginal_entry})
+            return reverse("journals:entry_log", kwargs={"orginal_entry":entry.orginal_entry, "journal_id":entry.journal.id})
 
 
         #
@@ -265,7 +321,7 @@ class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
             entry = Entry(journal= self.object.journal,
                           title_text=self.object.title_text,
                           body_text=self.object.body_text,
-                          published_date=self.object.published_date,
+                          created_date=self.object.created_date,
                           hidden_boolean=self.object.hidden_boolean,
                           deleted_boolean=self.object.deleted_boolean,
                           orginal_entry=entry_orginal_id,
@@ -329,7 +385,7 @@ def entry_replace(request, pk, orginal_entry_index):
     # pk = journal.id
     # 'journals:entry_log'
     # orginal_entry = entry.orginal_entry
-    return redirect('journals:entry_log', orginal_entry=entry.orginal_entry)
+    return redirect('journals:entry_log', orginal_entry=entry.orginal_entry, journal_id=entry.journal.id)
 
 
 
@@ -344,6 +400,13 @@ class JournalEntryLog(LoginRequiredMixin, generic.ListView):
             queryset = super().get_queryset()
             print("********" + self.kwargs.get("orginal_entry"))
             return queryset.filter(orginal_entry=self.kwargs.get("orginal_entry"))
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            # entry = get_object_or_404(Entry, pk=self.kwargs.get("journal_id"))
+            # print("****", entry.id)
+            context["journal_id"] = pk=self.kwargs.get("journal_id")
+            return context
 
         # def get_context_data(self, **kwargs):
         #     context = super().get_context_data(**kwargs)

@@ -8,24 +8,43 @@
 
 
 <div class="container">
-<table class="table">
-    <thead>
-    <tr class ="info">
-        <th>Journal Name</th>
-        <th>Journal Description</th>
-        <th>Created Data</th>
-    </tr>
+<h1>Journal Detail</h1>
 
-    </thead>
-    <tbody>
-    <tr>
-        <td><a></a>{{ journal.name_text }}</td>
-        <td>{{ journal.description_text }}</td>
-        <td>{{ journal.created_date }}</td>
-    </tr>
-    </tbody>
+<form>
+ 
+    <label >Journal Name:</label>
+    <input type="text" class="form-control" value="{{journal.name_text}}" disabled>
 
-</table>
+
+    <label>Journal Description:</label>
+    <input type="textarea" class="form-control" value="{{ journal.description_text }}" disabled>
+
+
+    <label>Created Data:</label>
+
+    <input type="text" class="form-control" value="{{ journal.created_date }}" disabled>
+
+</form>
+
+{##}
+{#<table class="table">#}
+{#    <thead>#}
+{#    <tr class ="info">#}
+{#        <th>Journal Name</th>#}
+{#        <th>Journal Description</th>#}
+{#        <th>Created Data</th>#}
+{#    </tr>#}
+{##}
+{#    </thead>#}
+{#    <tbody>#}
+{#    <tr>#}
+{#        <td><a></a>{{ journal.name_text }}</td>#}
+{#        <td>{{ journal.description_text }}</td>#}
+{#        <td>{{ journal.created_date }}</td>#}
+{#    </tr>#}
+{#    </tbody>#}
+{##}
+{#</table>#}
 
 {##}
 {#		<strong>{{ journal.user.username }}</strong>#}
@@ -36,7 +55,9 @@
 {#        <h1>{{ journal.description_text }}</h1>#}
     <div class="media-footer">
 			{% if user.is_authenticated%}
+
                 <a class="btn btn-primary" href="{% url 'journals:edit' pk=journal.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                 <a class="btn btn-primary" href="{% url 'journals:all' %}"><span class="glyphicon glyphicon-ok"></span></a>
                 <a class="btn btn-primary" href="{% url 'journals:delete' pk=journal.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
 
 

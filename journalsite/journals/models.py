@@ -47,18 +47,7 @@ class Journal(models.Model):
 
     class Meta:
         ordering = ["name_text"]
-#
-# @python_2_unicode_compatible
-# EntryLog can record multiple users and journals
-# class EntryLog(models.Model):
-#     journal = models.ForeignKey(Journal,  related_name="user_journal", on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, related_name="user_entry", on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return self.user.username
-#
-#     class Meta:
-#         unique_together=("journal","user")
+
 
 
 class Entry(models.Model):
@@ -66,7 +55,7 @@ class Entry(models.Model):
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
     title_text = models.CharField('entry title', max_length=200)
     body_text = models.CharField('entry body', max_length=200)
-    published_date = models.DateField('published date', default= datetime.date.today())
+    created_date = models.DateField('published date', default= timezone.now)
     hidden_boolean = models.BooleanField('hidden', default=False)
     deleted_boolean = models.BooleanField('deleted', default=False)
     orginal_entry = models.PositiveIntegerField(default=0)
@@ -76,11 +65,22 @@ class Entry(models.Model):
 
     def get_absolute_url(self):
         print("********")
-        return reverse("journals:entry_detail",kwargs={"entryname":self.title_text, "pk":self.pk })
+        return reverse("journals:entry_detail",kwargs={ "pk":self.pk })
 
 
 
-
+        #
+        # @python_2_unicode_compatible
+        # EntryLog can record multiple users and journals
+        # class EntryLog(models.Model):
+        #     journal = models.ForeignKey(Journal,  related_name="user_journal", on_delete=models.CASCADE)
+        #     user = models.ForeignKey(User, related_name="user_entry", on_delete=models.CASCADE)
+        #
+        #     def __str__(self):
+        #         return self.user.username
+        #
+        #     class Meta:
+        #         unique_together=("journal","user")
     #
 #
 #

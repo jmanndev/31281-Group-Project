@@ -1,12 +1,21 @@
 {% extends "journals/entry_base.html" %}
-
+{#<!DOCTYPE html>#}
+{##}
+{#{% load staticfiles %}#}
+{##}
+{#<html>#}
+{#<head>#}
+{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
+{#    <script>hello()</script>#}
+{#</head>#}
+{#<body>#}
 {% block preentry %}
 
 <h1>Entry List</h1>
     <div class="container">
 
 
-    <form action="{% url 'journals:entry_search' %}" method="get">
+    <form action="{% url 'journals:entry_search' %}" method="get" onsubmit="myFunction()">
                 {% csrf_token %}
                     Search Content:
                     <input type="text" name="content">
@@ -18,7 +27,19 @@
                     <input type="date" name="end_date">
                     <input type="hidden" name="journal_id" value={{ gournal_id }}>
                     <input type="submit" value="Search" class="btn btn-primary btn-large">
+        <input type="hidden" name="seletor_value" id="list_seletor">
     </form>
+
+      <form action="{% url 'journals:entry_list' pk=gournal_id %}" method="GET" id="entry-select">
+    {% csrf_token %}
+    <select id="id_entry_list" name="entry_lists" onchange="hello();">
+{#      <option disabled selected> -- select an option -- </option>#}
+
+      <option value=1 id="option_1">Active Entries</option>
+      <option value=2 id="option_2">All Entries</option>
+    </select>
+    <script>setValue({{ select_id }})</script>
+  </form>
     </br>
     {% if object_list.content == 0 %}
         <li>No Entries yet.</li>
@@ -29,8 +50,8 @@
     <tr class ="info">
         <th>Entry Name</th>
         <th>Entry Description</th>
-        <th>Entry Data</th>
-        <th>Entry Log</th>
+        <th>Created Data</th>
+        <th>Entryss History</th>
         <th>Hide Entry</th>
 
     </tr>
@@ -39,11 +60,17 @@
     <tbody>
     {% for entry in object_list  %}
     <tr>
-        <td><a href="{% url 'journals:entry_detail' entry.title_text entry.id %}">{{ entry.title_text }}</a></td>
+        {% if entry.deleted_boolean %}
+            <td><a href="{% url 'journals:entry_detail' pk=entry.id %}">{{ entry.title_text }}</a><font size="3" color="red">[Deleted]</font></td>
+            {% else %}
+            <td><a href="{% url 'journals:entry_detail' pk=entry.id %}">{{ entry.title_text }}</a></td>
+        {% endif %}
+{#        <td><a href="{% url 'journals:entry_detail' entry.title_text entry.id %}">{{ entry.title_text }}</a></td>#}
         <td>{{ entry.body_text }}</td>
-        <td>{{ entry.published_date }}</td>
 
-        <td><a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Entry Log</a></td>
+        <td>{{ entry.created_date }}</td>
+
+        <td><a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry journal_id=entry.journal.id %}" class="btn btn-md btn-fill btn-warning"> Entry History</a></td>
         {% if entry.hidden_boolean %}
             <td><a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-warning"></span> Invisible Entry</a></td>
         {% else %}
@@ -65,8 +92,8 @@
 </table>
 {% endif %}
     <a href="{% url 'journals:entry_create' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Entry!</a>
-    <a href="{% url 'journals:entry_list' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Active Entry</a>
-     <a href="{% url 'journals:entry_list_all' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> All Entry</a>
+{#    <a href="{% url 'journals:entry_list' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Active Entry</a>#}
+{#     <a href="{% url 'journals:entry_list_all' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> All Entry</a>#}
 {# journal = models.ForeignKey(Journal, on_delete=models.CASCADE)#}
 {#    title_text = models.CharField('entry title', max_length=200)#}
 {#    body_text = models.CharField('entry body', max_length=200)#}
@@ -81,7 +108,12 @@
 {#        <h1>{{ journal.name_text }}</h1>#}
 {#        <h1>Journal Description:</h1>#}
 {#        <h1>{{ journal.description_text }}</h1>#}
+{#    <script>hello()</script>#}
+
+
 
 </div>
 
+
 {% endblock %}
+{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}

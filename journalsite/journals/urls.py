@@ -19,14 +19,19 @@ urlpatterns = [
     url(r"^journal/entry/list/(?P<pk>\d+)/$", views.JournalEntryList.as_view(), name="entry_list"),
     url(r"^journal/entry/list/(?P<pk>\d+)/all/$", views.JournalEntryListAll.as_view(), name="entry_list_all"),
     url(r"^journal/entry/create/(?P<pk>\d+)/$", views.JournalEntryCreate.as_view(), name="entry_create"),
-    url(r"^journal/entry/(?P<entryname>[-\w]+)/(?P<pk>\d+)/$",views.JournalEntryDetail.as_view(),name="entry_detail"),
+    url(r"^journal/entry/(?P<pk>\d+)/detail/$",views.JournalEntryDetail.as_view(),name="entry_detail"),
+    url(r"^journal/entry/log/(?P<entryname>[-\w]+)/(?P<pk>\d+)/$",views.JournalEntryHistoryDetail.as_view(),name="entry_history_detail"),
     url(r'^journal/entry/(?P<pk>\d+)/edit/$', views.JournalEntryUpdate.as_view(), name='entry_update'),
     url(r'^journal/entry/(?P<pk>\d+)/remove/$', views.entry_remove, name='entry_remove'),
-    url(r'^journal/entry/(?P<orginal_entry>\d+)/log/$', views.JournalEntryLog.as_view(), name='entry_log'),
+    url(r'^journal/entry/(?P<orginal_entry>\d+)/(?P<journal_id>\d+)/log/$', views.JournalEntryLog.as_view(), name='entry_log'),
     url(r'^journal/entry/(?P<pk>\d+)/hide/$', views.entry_hide, name='entry_hide'),
     url(r'^journal/entry/(?P<pk>\d+)/replace/(?P<orginal_entry_index>\d+)/$', views.entry_replace, name='entry_replace'),
-    url(r'^journal/entry/search/$', views.JournalEntrySearchList.as_view(), name='entry_search'),
-    # url(r'^admin/', admin.site.urls),
+    url(r'^journal/entry/search/$', views.JournalEntrySearchList.as_view(), name='entry_search'),]
+
+# url(r"^journal/entry/(?P<entryname>[-\w]+)/(?P<pk>\d+)/detail/$", views.JournalEntryDetail.as_view(),
+#     name="entry_detail"),
+
+# url(r'^admin/', admin.site.urls),
     #www.web.com
   
     # url(r'^$', views.index, name='index'),
