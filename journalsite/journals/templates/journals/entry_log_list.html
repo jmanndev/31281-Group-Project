@@ -8,7 +8,7 @@
 
         <ol>
             {% for entry in object_list  %}
-                <li>The entry " {{ entry.title_text }} " is edited by User:{{ user.username }},at {{ entry.created_date }}<a href="{% url 'journals:entry_history_detail'  entry.title_text entry.id %}"><font size="5">Detail</font></a></li>
+                <li>The entry " {{ entry.title_text }} " is edited by User:{{ user.username }},at {{ entry.created_date }}<a href="{% url 'journals:entry_history_detail'  pk=entry.id %}"><font size="5">Detail</font></a></li>
              {% empty %}
     <li>No Entry History Yet.</li>
 

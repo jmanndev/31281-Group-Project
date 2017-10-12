@@ -205,7 +205,7 @@ class JournalEntryList(LoginRequiredMixin, generic.ListView):
             return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
                 hidden_boolean=True).exclude(is_available=False)
         elif (self.request.GET.get('entry_lists', 0) == '2'):
-            return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(is_available=False)
+            return queryset.filter(journal_id=self.kwargs.get("pk"))
         else:
             return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
                 hidden_boolean=True).exclude(is_available=False)
@@ -265,7 +265,21 @@ class JournalEntryHistoryDetail(LoginRequiredMixin, generic.DetailView):
                 # kwargs 是指r"by/(?P<username>[-\w]+)/(?P<pk>\d+)/$" 里面的username和ok
         return queryset.filter(pk=self.kwargs.get("pk"))
 
+class JournalEntryLog(LoginRequiredMixin, generic.ListView):
+    model = Entry
+    template_name_suffix = '_log_list'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        print("********" + self.kwargs.get("orginal_entry"))
+        return queryset.filter(orginal_entry=self.kwargs.get("orginal_entry"))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+            # entry = get_object_or_404(Entry, pk=self.kwargs.get("journal_id"))
+            # print("****", entry.id)
+        context["journal_id"] = pk = self.kwargs.get("journal_id")
+        return context
 
 
 class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
@@ -276,24 +290,11 @@ class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
         # success_url  = 'journals:login'
         form_class = EntryUpdateForm
 
-        # reverse("journals:entry_detail", kwargs={"entryname": self.title_text, "pk": self.pk})
-        # redirect_field_name = 'journals:EntryLog  pk=journal.id'
-
-        # def get_queryset(self):
-        # def get_context_data(self, **kwargs):
-        #     context = super().get_context_data(**kwargs)
-        #     context["entry_body_"]
-
         def get_success_url(self):
             # get entry list including same value of orginal_entry
 
             entry = get_object_or_404(Entry, pk=self.kwargs.get("pk"))
-            # have to store the original entry
 
-            # originalEntry =
-
-
-            # print("********" + entry.orginal_entry)
             return reverse("journals:entry_log", kwargs={"orginal_entry":entry.orginal_entry, "journal_id":entry.journal.id})
 
 
@@ -393,20 +394,6 @@ def entry_replace(request, pk, orginal_entry_index):
 
 
 
-class JournalEntryLog(LoginRequiredMixin, generic.ListView):
-        model = Entry
-        template_name_suffix = '_log_list'
-        def get_queryset(self):
-            queryset = super().get_queryset()
-            print("********" + self.kwargs.get("orginal_entry"))
-            return queryset.filter(orginal_entry=self.kwargs.get("orginal_entry"))
-
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            # entry = get_object_or_404(Entry, pk=self.kwargs.get("journal_id"))
-            # print("****", entry.id)
-            context["journal_id"] = pk=self.kwargs.get("journal_id")
-            return context
 
         # def get_context_data(self, **kwargs):
         #     context = super().get_context_data(**kwargs)
