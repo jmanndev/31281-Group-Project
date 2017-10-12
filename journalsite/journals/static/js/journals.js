@@ -15,3 +15,9 @@ function setValue(id) {
         document.getElementById("option_2").selected = 'selected';
     }
 }
+
+function myFunction() {
+    document.getElementById("list_seletor").value = document.getElementById("id_entry_list").value;
+    // alert(document.getElementById("list_seletor").value)
+
+}
