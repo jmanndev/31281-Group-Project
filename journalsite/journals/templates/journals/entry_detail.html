@@ -36,9 +36,9 @@
                     <a class="btn btn-primary" href="{% url 'journals:entry_update' pk=entry.pk %}">Edit <span class="glyphicon glyphicon-pencil"></span></a>
                 {% endif %}
 
-                
+
                 <a class="btn btn-primary" href="{% url 'journals:entry_remove' pk=entry.pk %}">Delete <span class="glyphicon glyphicon-remove"></span></a>
-        <a class="btn btn-primary" href="{% url 'journals:entry_list' pk=entry.journal.id %}">Return to Journal</a>
+                <a class="btn btn-primary" href="{% url 'journals:entry_list' pk=entry.journal.id %}">Return to Journal</a>
 
 			{% endif %}
 		</div>
