@@ -7,6 +7,8 @@
   {% csrf_token %}
   {% bootstrap_form form %}
   	<input type="submit" value="Save" class="btn btn-primary btn-large">
+    
+                 <a class="btn btn-primary" href="{% url 'journals:all' %}">Return to Journals</a>
 </form>
 {#    <script>var editor = new MediumEditor('.editable');</script>#}
 {% endblock %}

@@ -2,12 +2,13 @@
 {% load bootstrap3 %}
 
 {% block preentry %}
-<h4>Create A New Entry</h4>
+<h4></h4>
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
     <a class="btn btn-primary" href="{% url 'journals:entry_list' pk=journal_id %}">Cancel</a>
   	<input type="submit" value="Save" class="btn btn-primary btn-large">
+
 </form>
 {#    add edit#}
 {#    <script>var editor = new MediumEditor('.editable');</script>#}

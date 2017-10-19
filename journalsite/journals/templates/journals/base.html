@@ -2,7 +2,7 @@
 {% load staticfiles %}
 <html>
     <head>
-        <title>Blog Project</title>
+        <title>Journal Project</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -44,24 +44,14 @@
 
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-{#        <li>#}
-{#          <a href="{% url 'post_new' %}" >New Post</a>#}
-{#        </li>#}
-{##}
-{#        <li>#}
-{#          <a href="{% url 'post_draft_list' %}">Drafts</a>#}
-{#        </li>#}
+
             <li><a href="{% url 'journals:all' %}" class="btn btn-simple">Journals</a></li>
             <li><a href="{% url 'journals:create' %}" class="btn btn-simple">Create Journal</a></li>
         <li>
           <a href="{% url 'journals:logout' %}" >Log out</a>
         </li>
 
-{#        <li>#}
-{#          <a >Welcome: {{ user.username }}</a>#}
-{#        </li>#}
           {% else %}
-{#          <li><a class='nav navbar-right' href="#" ><span class="glyphicon glyphicon-user"></span></a></li>#}
             <li><a href="{% url 'journals:login' %}" class="btn btn-simple">Log in</a></li>
     		<li><a href="{% url 'journals:signup' %}" class="btn btn-simple">Sign up</a></li>
         {% endif %}
