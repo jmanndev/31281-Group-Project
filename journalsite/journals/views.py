@@ -110,15 +110,15 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
         if self.request.GET.get("seletor_value", 0) == '1':
             print("*****" + self.request.GET.get("seletor_value", 0))
             queryset = queryset.filter(journal_id=self.journal_id).exclude(deleted_boolean=True).exclude(
-            hidden_boolean=True).exclude(is_available=False)
+            hidden_boolean=True).exclude(is_available=False).order_by('-created_date')
         elif self.request.GET.get("seletor_value", 0) == '2':
             print("*****" + self.request.GET.get("seletor_value", 0))
-            queryset = queryset.filter(journal_id=self.journal_id).exclude(is_available=False)
+            queryset = queryset.filter(journal_id=self.journal_id).order_by('-created_date')
         else:
             queryset = queryset.filter(journal_id=self.journal_id).exclude(deleted_boolean=True).exclude(
-                hidden_boolean=True).exclude(is_available=False)
+                hidden_boolean=True).exclude(is_available=False).order_by('-created_date')
 
-        print("*****" +self.request.GET.get("seletor_value", 0))
+
 
         content = self.request.GET.get("content")
         if content != None:
@@ -133,17 +133,8 @@ class JournalEntrySearchList(LoginRequiredMixin, generic.ListView):
         if start_date != '' and end_date != '':
             queryset = queryset.filter(Q(created_date__gte = start_date) & Q(created_date__lte =end_date))
 
-        # date = self.request.GET.get("date")
-        # date = datetime.datetime.strptime(date, '%Y-%m-%d')
-        #
-        # # date = datetime.time.strftime(date, '%Y-%m-%d')
-        # print( date.year, date.month, date.day)
-        # datetime.datetime.now().da
 
-        # print("********"  + "**" + date + "*" + start_date + "*" +end_date )
-        # return queryset
-        # if content != None:
-        #     else if
+
         return queryset
 
     # def get_queryset(self):
@@ -189,7 +180,7 @@ class JournalList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(user=self.request.user)
+        return queryset.filter(user=self.request.user).order_by('-created_date')
 
 
 
@@ -200,15 +191,15 @@ class JournalEntryList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print("************", self.request.GET.get('entry_lists', 0))
+        # get all active entries
         if (self.request.GET.get('entry_lists', 0) == '1'):
             return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
-                hidden_boolean=True).exclude(is_available=False)
+                hidden_boolean=True).exclude(is_available=False).order_by('-created_date')
         elif (self.request.GET.get('entry_lists', 0) == '2'):
-            return queryset.filter(journal_id=self.kwargs.get("pk"))
+            return queryset.filter(journal_id=self.kwargs.get("pk")).order_by('-created_date')
         else:
             return queryset.filter(journal_id=self.kwargs.get("pk")).exclude(deleted_boolean=True).exclude(
-                hidden_boolean=True).exclude(is_available=False)
+                hidden_boolean=True).exclude(is_available=False).order_by('-created_date')
         # print("********" + self.request)
 
 
@@ -248,6 +239,13 @@ class JournalEntryCreate(LoginRequiredMixin, CreateView):
         # print("**********self.object.pk**************" , entry.id)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+            # entry = get_object_or_404(Entry, pk=self.kwargs.get("journal_id"))
+        print("****", self.kwargs.get("pk"))
+        context["journal_id"] = self.kwargs.get("pk")
+        return context
+
 
 
 
@@ -263,7 +261,7 @@ class JournalEntryHistoryDetail(LoginRequiredMixin, generic.DetailView):
         queryset = super().get_queryset()
         # print(queryset)
                 # kwargs 是指r"by/(?P<username>[-\w]+)/(?P<pk>\d+)/$" 里面的username和ok
-        return queryset.filter(pk=self.kwargs.get("pk"))
+        return queryset.filter(pk=self.kwargs.get("pk")).order_by('-created_date')
 
 class JournalEntryLog(LoginRequiredMixin, generic.ListView):
     model = Entry

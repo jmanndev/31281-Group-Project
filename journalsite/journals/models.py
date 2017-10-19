@@ -38,15 +38,16 @@ class Journal(models.Model):
     def save(self, *args, **kwargs):
         # self.pk = self.pk
         # print("1111111&" + self.slug)
+
         self.slug = slugify(self.name_text)
         super().save(*args, **kwargs)
 
+
     def get_absolute_url(self):
-        # print("22222222&" + self.slug)
         return reverse("journals:single", kwargs={"slug":self.slug})
 
     class Meta:
-        ordering = ["name_text"]
+        ordering = ["created_date"]
 
 
 
@@ -66,6 +67,9 @@ class Entry(models.Model):
     def get_absolute_url(self):
         print("********")
         return reverse("journals:entry_detail",kwargs={ "pk":self.pk })
+
+    class Meta:
+        ordering = ["created_date"]
 
 
 

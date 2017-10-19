@@ -17,7 +17,7 @@
     <tbody >
     {% for journal in object_list  %}
     <tr>
-        <td><a href="{% url 'journals:single' slug=journal.slug %}">{{ journal.slug }}</a></td>
+        <td><a href="{% url 'journals:single' slug=journal.slug %}">{{ journal.name_text }}</a></td>
         <td>{{ journal.description_text }}</td>
         <td>{{ journal.created_date }}</td>
         <td><a href="{% url 'journals:entry_list' pk=journal.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
