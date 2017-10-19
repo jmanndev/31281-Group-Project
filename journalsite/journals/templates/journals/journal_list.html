@@ -2,7 +2,8 @@
 {# <script>hello()</script>#}
 {% block pregroup %}
     <div class="container">
-    <h1>Journals</h1>
+    <h1>Journals
+        <a href="{% url 'journals:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> New Journal</a></h1>
 <table class="table">
     <thead>
     <tr class ="info">
@@ -20,7 +21,7 @@
         <td>{{ journal.name_text }}</td>
         <td>{{ journal.description_text }}</td>
         <td>{{ journal.created_date }}</td>
-        <td><a href="{% url 'journals:entry_list' pk=journal.id %}">View</a></td>
+        <td><a  class="btn btn-primary" href="{% url 'journals:entry_list' pk=journal.id %}">View</a></td>
         <td><center>
             <a class="btn btn-primary" href="{% url 'journals:edit' pk=journal.pk %}">Edit <span class="glyphicon glyphicon-pencil"></span></a>
             <a class="btn btn-primary" href="{% url 'journals:delete' pk=journal.pk %}">Delete <span class="glyphicon glyphicon-remove"></span></a>
