@@ -1,17 +1,7 @@
 {% extends "journals/entry_base.html" %}
-{#<!DOCTYPE html>#}
-{##}
-{#{% load staticfiles %}#}
-{##}
-{#<html>#}
-{#<head>#}
-{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
-{#    <script>hello()</script>#}
-{#</head>#}
-{#<body>#}
 {% block preentry %}
 
-<h1>Entry List</h1>
+<h1>Journal</h1>
     <div class="container">
 
 
@@ -19,28 +9,33 @@
                 {% csrf_token %}
                     Search Content:
                     <input type="text" name="content">
-                    Date:
+        <p></p>
+                    On this date:
                     <input type="date" name="date">
+        <p></p>
                     From:
                     <input type="date" name="start_date">
                     To:
                     <input type="date" name="end_date">
                     <input type="hidden" name="journal_id" value={{ gournal_id }}>
+        <p></p>
                     <input type="submit" value="Search" class="btn btn-primary btn-large">
         <input type="hidden" name="seletor_value" id="list_seletor">
     </form>
 
       <form action="{% url 'journals:entry_list' pk=gournal_id %}" method="GET" id="entry-select">
     {% csrf_token %}
+          
+          <p></p>
+          
+    <a href="{% url 'journals:entry_create' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> New Entry</a>
+          Filter by:
     <select id="id_entry_list" name="entry_lists" onchange="hello();">
-{#      <option disabled selected> -- select an option -- </option>#}
-
-      <option value=1 id="option_1">Active Entries</option>
+      <option value=1 id="option_1">Visible Entries</option>
       <option value=2 id="option_2">All Entries</option>
     </select>
     <script>setValue({{ select_id }})</script>
   </form>
-    </br>
     {% if object_list.content == 0 %}
         <li>No Entries yet.</li>
     {% else %}
@@ -50,9 +45,8 @@
     <tr class ="info">
         <th>Entry Name</th>
         <th>Entry Description</th>
-        <th>Created Data</th>
-        <th>Entryss History</th>
-        <th>Hide Entry</th>
+        <th>Created Date</th>
+        <th><center>Manage</center></th>
 
     </tr>
 
@@ -61,28 +55,34 @@
     {% for entry in object_list  %}
     <tr>
         {% if entry.deleted_boolean %}
-            <td><a href="{% url 'journals:entry_detail' pk=entry.id %}">{{ entry.title_text }}</a><font size="3" color="red">[Deleted]</font></td>
+            <td><font color="red">[Deleted]{{ entry.title_text }}</font></td>
             {% else %}
-            <td><a href="{% url 'journals:entry_detail' pk=entry.id %}">{{ entry.title_text }}</a></td>
+            <td>{{ entry.title_text }}</td>
         {% endif %}
-{#        <td><a href="{% url 'journals:entry_detail' entry.title_text entry.id %}">{{ entry.title_text }}</a></td>#}
         <td>{{ entry.body_text }}</td>
 
         <td>{{ entry.created_date }}</td>
-
-        <td><a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry journal_id=entry.journal.id %}" class="btn btn-md btn-fill btn-warning"> Entry History</a></td>
+        <td>
+        <center>
+        {% if entry.deleted_boolean %}
+        {%else%}
         {% if entry.hidden_boolean %}
-            <td><a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-warning"></span> Invisible Entry</a></td>
+            <a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-warning">Unhide</a>
         {% else %}
-            <td><a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-info"></span> Visible Entry</a></td>
+            <a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-info">Hide</a>
         {% endif %}
+        <a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry journal_id=entry.journal.id %}" class="btn btn-md btn-fill btn-warning">History</a>
+            
+                    <a class="btn btn-primary" href="{% url 'journals:entry_update' pk=entry.pk %}">Edit <span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-primary" href="{% url 'journals:entry_remove' pk=entry.pk %}">Delete <span class="glyphicon glyphicon-remove"></span></a>
+</center>
+        {% endif %}
+            </td>
 
     </tr>
         {% empty %}
     <tr>
-{#"journals:entry_log", kwargs={"orginal_entry":entry.orginal_entry})#}
-        <td>No Entries!!</td>
-
+        <td>No entries!</td>
     </tr>
 
 
@@ -91,29 +91,7 @@
 
 </table>
 {% endif %}
-    <a href="{% url 'journals:entry_create' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Entry!</a>
-{#    <a href="{% url 'journals:entry_list' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Active Entry</a>#}
-{#     <a href="{% url 'journals:entry_list_all' pk=gournal_id %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> All Entry</a>#}
-{# journal = models.ForeignKey(Journal, on_delete=models.CASCADE)#}
-{#    title_text = models.CharField('entry title', max_length=200)#}
-{#    body_text = models.CharField('entry body', max_length=200)#}
-{#    published_date = models.DateTimeField('published date', default= timezone.now)#}
-{#    hidden_boolean = models.BooleanField('hidden', default=False)#}
-{#    deleted_boolean = models.BooleanField('deleted', default=False)#}
-{#    orginal_id = models.IntegerField('orginal entry id', null= True)#}
-{##}
-{#		<strong>{{ journal.user.username }}</strong>#}
-{##}
-{#	    <h1>Journal Name:</h1>#}
-{#        <h1>{{ journal.name_text }}</h1>#}
-{#        <h1>Journal Description:</h1>#}
-{#        <h1>{{ journal.description_text }}</h1>#}
-{#    <script>hello()</script>#}
 
-
-
-</div>
-
+                 <a class="btn btn-primary" href="{% url 'journals:all' %}">Return to Journals</a>
 
 {% endblock %}
-{#<script type="text/javascript" src="{% static 'js/journals.js' %}"></script>#}
