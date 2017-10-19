@@ -276,7 +276,7 @@ class JournalEntryLog(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
             # entry = get_object_or_404(Entry, pk=self.kwargs.get("journal_id"))
             # print("****", entry.id)
-        context["journal_id"] = pk = self.kwargs.get("journal_id")
+        context["journal_id"] = self.kwargs.get("journal_id")
         return context
 
 
@@ -338,6 +338,13 @@ class JournalEntryUpdate(LoginRequiredMixin, UpdateView):
             # success_url = reverse_lazy("journals:entry_log", kwargs={"pk": self.kwargs.get("pk")})
             # print("************" +entry.pk)
             return super().form_valid(entry)
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            entry = get_object_or_404(Entry, pk=self.kwargs.get("pk"))
+            # print("****", entry.id)
+            context["journal_id"] = entry.journal_id
+            return context
 
 # class JournalEntryRemove(LoginRequiredMixin, generic.DeleteView):
 #     model = Entry

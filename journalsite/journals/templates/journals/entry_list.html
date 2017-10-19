@@ -71,10 +71,9 @@
         {% else %}
             <a href="{% url 'journals:entry_hide' pk=entry.id %}" class="btn btn-md btn-fill btn-info">Hide</a>
         {% endif %}
-        <a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry journal_id=entry.journal.id %}" class="btn btn-md btn-fill btn-warning">History</a>
-            
-                    <a class="btn btn-primary" href="{% url 'journals:entry_update' pk=entry.pk %}">Edit <span class="glyphicon glyphicon-pencil"></span></a>
-                <a class="btn btn-primary" href="{% url 'journals:entry_remove' pk=entry.pk %}">Delete <span class="glyphicon glyphicon-remove"></span></a>
+            <a href="{% url 'journals:entry_log' orginal_entry=entry.orginal_entry journal_id=entry.journal.id %}" class="btn btn-md btn-fill btn-warning">History</a>
+            <a class="btn btn-primary" href="{% url 'journals:entry_update' pk=entry.pk %}">Edit <span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-primary" href="{% url 'journals:entry_remove' pk=entry.pk %}">Delete <span class="glyphicon glyphicon-remove"></span></a>
 </center>
         {% endif %}
             </td>
