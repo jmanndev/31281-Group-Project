@@ -10,12 +10,16 @@ urlpatterns = [
     url(r'^logout/$',auth_views.LogoutView.as_view(), name='logout'),
     url(r"^signup/$", views.SignUp.as_view(), name="signup"),
     url(r"^test/$", views.TestPage.as_view(), name="test"),
+    url(r"^faqs/$", views.FAQs.as_view(), name="faqs"),
+
     url(r"^thanks/$", views.ThanksPage.as_view(), name="thanks"),
     url(r"^new/$", views.CreateJournal.as_view(), name="create"),
+
     url(r"^journal/in/(?P<slug>[-\w]+)/$",views.JournalDetail.as_view(),name="single"),
     url(r"^journal/edit/(?P<pk>\d+)/$", views.EditJournal.as_view(), name="edit"),
     url(r"^journal/delete/(?P<pk>\d+)/$",views.DeleteJournal.as_view(),name="delete"),
     url(r"^journal/all/$", views.JournalList.as_view(), name="all"),
+    url(r"^journal/search/$", views.JournalSearchList.as_view(), name="journal_search"),
     url(r"^journal/entry/list/(?P<pk>\d+)/$", views.JournalEntryList.as_view(), name="entry_list"),
     url(r"^journal/entry/list/(?P<pk>\d+)/all/$", views.JournalEntryListAll.as_view(), name="entry_list_all"),
     url(r"^journal/entry/create/(?P<pk>\d+)/$", views.JournalEntryCreate.as_view(), name="entry_create"),

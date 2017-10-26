@@ -3,6 +3,18 @@
 {% block pregroup %}
     <div class="container">
     <h1>Journals</h1>
+
+     <form action="{% url 'journals:journal_search' %}" method="get" onsubmit="myFunction()">
+                {% csrf_token %}
+                    Search Content:
+                    <input type="text" name="content">
+
+                    <input type="submit" value="Search" class="btn btn-primary btn-large">
+
+    </form>
+
+
+
 <table class="table">
     <thead>
     <tr class ="info">

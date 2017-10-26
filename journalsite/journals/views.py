@@ -41,6 +41,8 @@ class TestPage(TemplateView):
     template_name = 'journals/test.html'
 
     # href = "{% url 'journals:all' %}"
+class FAQs(TemplateView):
+    template_name = 'journals/faqs.html'
 
 
 class ThanksPage(TemplateView):
@@ -182,12 +184,15 @@ class JournalList(LoginRequiredMixin, generic.ListView):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user).order_by('-created_date')
 
+class JournalSearchList(LoginRequiredMixin, generic.ListView):
+    model = Journal
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user).order_by('-created_date')
 
 class JournalEntryList(LoginRequiredMixin, generic.ListView):
     model = Entry
-
-
 
     def get_queryset(self):
         queryset = super().get_queryset()
